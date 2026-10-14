@@ -15,8 +15,29 @@
 | Поменять порядок разделов | переставить строки в `content/site.json` → `blocks` |
 | Записать, что поменялось | добавить строку сверху в `content/blocks/log.json` и обновить `updated` в `site.json` |
 
-**Типы разделов:** `hero`, `cards`, `stages`, `tables`, `modules`, `metrics`, `checklist`, `log`, `markdown` (файл `.md`).
-В текстах можно писать `**жирный**` и `` `код` ``. HTML в данных не нужен.
+**Типы разделов** (у каждого свой файл в `content/blocks/`, посмотреть пример — открыть файл):
+
+| Тип | Что рисует | Главные поля |
+|---|---|---|
+| `hero` | шапка: заголовок, орбита, 4 цифры | `title`, `lead`, `stats[]` (`kind`: ring / dots / plain, `value`, `of`, `big`, `label`, `icon`) |
+| `flow` | схема «метод → продукт → специалист → клиент» | `nodes[]` (`icon`, `title`, `text`), `gets[]` |
+| `cards` | карточки | `items[]` (`icon`, `title`, `text`) |
+| `roadmap` | дорожка этапов, клик — подробности | `items[]` (`n`, `title`, `short`, `status`: сейчас / далее, `icon`, `goal`, `segments`, `do`, `money`, `exit`), `sequence` |
+| `split` | полоса «кому сколько с продажи» | `total`, `parts[]` (`key`: spec / platform / cost, `label`, `value`, `note`), `also[]` |
+| `funnel` | воронка с переключателем сценариев | `steps[]`, `scenarios[]` (`name`, `values[]` — по числу шагов, `money`, `default`) |
+| `bars` | горизонтальные полосы сравнения | `unit`, `max`, `items[]` (`label`, `value`, `note`, `ours`) |
+| `pricing` | тарифы | `free[]`, `plans[]` (`name`, `price`, `per`, `features`, `icon`, `hot`), `extra` |
+| `tables` | таблицы; `"collapsed": true` в site.json — свёрнуты | `tables[]` (`title`, `columns`, `rows`, `note`) |
+| `modules` | карта модулей с фильтрами | `groups[]` → `rows[]` |
+| `metrics` | шкалы метрик | `items[]` (`icon`, `label`, `value`, `target`, `shown`, `target_text`, `status`, `hint`) |
+| `risks` | риски с уровнем 1–3 | `items[]` (`icon`, `risk`, `level`, `answer`) |
+| `checklist` | открытые решения | `items[]` (`q`, `done`, `answer`) |
+| `log` | журнал | `items[]` (`date`, `text`) |
+| `markdown` | свободный текст из `.md` | — |
+
+**Иконки** — имена из набора Lucide (https://lucide.dev/icons), например `book-open`, `users`, `wallet`.
+**В текстах:** `**жирный**`, `_акцент_` (курсив), `` `код` ``. Метки ❓ ✅ ⚠️ 🔴 🟡 ⚪ сами превращаются в значки — их можно писать как есть. HTML в данных не нужен.
+**Поле `_help`** в файле — подсказка для правящего, на странице не показывается.
 
 ## Правила, чтобы ничего не потерять
 1. Перед отправкой — `python3 tools/check.py`: проверяет, что все файлы читаются и у блоков есть нужные поля.
