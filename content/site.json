@@ -20,6 +20,12 @@
       "src": "blocks/model.json"
     },
     {
+      "id": "machine",
+      "type": "machine",
+      "src": "blocks/machine.json",
+      "nav": "Машина"
+    },
+    {
       "id": "channels",
       "type": "cards",
       "src": "blocks/channels.json"

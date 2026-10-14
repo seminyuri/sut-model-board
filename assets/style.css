@@ -127,7 +127,7 @@ i.ic { display: inline-block; } /* держит место, пока грузя�
 }
 
 /* общая поверхность */
-.card, .flow-node, .rm, .split, .funnel, .bars, .disc, .pc, .rp, .qa, .plan, .free, .metric, .risk, .msum, .filters, .mgroup, .check li, .tbl, .seq, .more, .err {
+.mach, .card, .flow-node, .rm, .split, .funnel, .bars, .disc, .pc, .rp, .qa, .plan, .free, .metric, .risk, .msum, .filters, .mgroup, .check li, .tbl, .seq, .more, .err {
   background: var(--bg-raised); border: var(--hair) solid var(--line-strong); border-radius: var(--r-l);
 }
 
@@ -326,6 +326,30 @@ i.ic { display: inline-block; } /* держит место, пока грузя�
 .price b { font-size: 30px; font-weight: 300; letter-spacing: -.02em; }
 .price span { color: var(--text-subtle); font-size: 14px; }
 
+
+
+/* ---------- машина привлечения ---------- */
+.mach { padding: clamp(18px, 3vw, 28px); display: grid; gap: clamp(18px, 3vw, 28px); }
+.mach-stats { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.mach-stats li { display: grid; gap: 4px; padding: 16px 18px; border-radius: var(--r); background: var(--bg-muted); }
+.mach-stats li > .ic { color: var(--accent); font-size: 18px; }
+.mach-stats b { font-size: clamp(26px, 3.4vw, 38px); font-weight: 300; letter-spacing: -.02em; line-height: 1.05; font-variant-numeric: tabular-nums; }
+.mach-stats span { font-size: 13.5px; color: var(--text-muted); line-height: 1.35; }
+.mach-asof { margin-top: 10px; display: flex; align-items: center; gap: 6px; text-transform: none; letter-spacing: .02em; }
+.mach-asof .ic { color: var(--ok); }
+.mach-steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; counter-reset: st; }
+.mach-steps li { position: relative; padding: 18px; border-radius: var(--r); border: var(--hair) solid var(--line-strong); display: flex; flex-direction: column; gap: 6px; }
+.mach-steps li.paid { border: 1px solid var(--accent); background: var(--accent-soft); }
+.mstep-n { position: absolute; top: 14px; right: 16px; font-size: 12px; }
+.mstep-ic { width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; background: var(--accent-soft); color: var(--accent); font-size: 19px; margin-bottom: 4px; }
+.mach-steps li.paid .mstep-ic { background: var(--accent); color: var(--on-mark); }
+.mach-steps h3 { font-size: 17px; font-weight: 500; }
+.mach-steps p { font-size: 14px; line-height: 1.5; color: var(--text-muted); }
+.mstep-tag { display: inline-flex; align-items: center; gap: 6px; margin-top: auto; padding-top: 6px; color: var(--accent); text-transform: none; letter-spacing: .02em; }
+.mach-prof { display: grid; gap: 10px; }
+.mach-prof > div { display: flex; flex-wrap: wrap; gap: 6px; }
+.mach-prof > div span { padding: 5px 11px; border-radius: 999px; border: var(--hair) solid var(--line-strong); font-size: 13px; font-weight: 500; }
+.mach-gets { grid-template-columns: repeat(4, 1fr); }
 
 /* ---------- скидка от специалиста ---------- */
 .disc { padding: clamp(18px, 3vw, 28px); display: grid; grid-template-columns: 280px 1fr; gap: clamp(18px, 3vw, 36px); align-items: start; }
@@ -547,6 +571,8 @@ tbody tr:hover td { background: var(--bg-muted); }
   .free ul { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); }
 }
 @media (max-width: 900px) {
+  .mach-stats, .mach-gets { grid-template-columns: repeat(2, 1fr); }
+  .mach-steps { grid-template-columns: repeat(2, 1fr); }
   .disc { grid-template-columns: 1fr; }
   .pcs, .ramp { grid-template-columns: 1fr; }
   .rp-chart { height: 110px; }
@@ -604,6 +630,8 @@ tbody tr:hover td { background: var(--bg-muted); }
   .log p { grid-column: 2; }
 }
 @media (max-width: 560px) {
+  .mach-steps, .mach-gets { grid-template-columns: 1fr; }
+  .mach-stats li { padding: 12px 14px; }
   .bar { gap: 8px; height: 56px; }
   html { scroll-padding-top: 64px; }
   .brand span:last-child { display: none; }
