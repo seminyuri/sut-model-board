@@ -13,6 +13,8 @@
 | Обновить метрику | в `metrics.json` поменять `value` и `status` (plan / ok / warn / bad) |
 | Добавить новый раздел | создать файл в `content/blocks/` и добавить строку в `content/site.json` → `blocks` (id, type, src, nav) |
 | Поменять порядок разделов | переставить строки в `content/site.json` → `blocks` |
+| Новое возражение и ответ | добавить строку в `content/blocks/faq.json` → `items` (кто спросил, статус, возражение, ответ, чем проверяем) |
+| Пересчитать сценарии сети | `python3 инструменты/сеть_по_месяцам.py` в папке модели, перенести цифры в `funnel.json`, `ramp.json`, `economics.json` |
 | Записать, что поменялось | добавить строку сверху в `content/blocks/log.json` и обновить `updated` в `site.json` |
 
 **Типы разделов** (у каждого свой файл в `content/blocks/`, посмотреть пример — открыть файл):
@@ -27,6 +29,9 @@
 | `funnel` | воронка с переключателем сценариев | `steps[]`, `scenarios[]` (`name`, `values[]` — по числу шагов, `money`, `default`) |
 | `bars` | горизонтальные полосы сравнения | `unit`, `max`, `items[]` (`label`, `value`, `note`, `ours`) |
 | `pricing` | тарифы | `free[]`, `plans[]` (`name`, `price`, `per`, `features`, `icon`, `hot`), `extra` |
+| `slider` | ползунок скидки от специалиста + плюсы и минусы | `price`, `spec`, `platform`, `cost` (сумма = цене), `steps[]`, `groups[]` (`who`, `icon`, `pros`, `cons`), `avoid`, `verdict` |
+| `ramp` | прибыль по месяцам, по панели на сценарий | `scenarios[]` (`name`, `values[12]`, `breakeven`, `year`, `facts`), `note` |
+| `faq` | возражения и ответы с фильтрами | `items[]` (`who`, `state`: answer / pilot / proposal / accepted, `q`, `a`, `check`, `note`) |
 | `tables` | таблицы; `"collapsed": true` в site.json — свёрнуты | `tables[]` (`title`, `columns`, `rows`, `note`) |
 | `modules` | карта модулей с фильтрами | `groups[]` → `rows[]` |
 | `metrics` | шкалы метрик | `items[]` (`icon`, `label`, `value`, `target`, `shown`, `target_text`, `status`, `hint`) |

@@ -124,7 +124,7 @@ const RENDER = {
         const r = v / s.values[k - 1] * 100;
         const conv = k ? `<span class="conv mono">${r.toLocaleString('ru-RU', { maximumFractionDigits: r < 10 ? 1 : 0 })} %</span>` : '';
         return `<div class="f-row"><span class="f-label">${rich(step)}</span><div class="f-bar"><span style="width:${w}%" data-tip="${esc(`${step}: ${fmt(v)}`)}" tabindex="0"></span></div><b class="f-val">${fmt(v)}</b>${conv}</div>`;
-      }).join('') + `<div class="f-money">${icon('banknote')}<span><span class="mono">Платформе</span><b>${rich(s.money)}</b></span></div>`;
+      }).join('') + `<div class="f-money">${icon('banknote')}<span><span class="mono">Прибыль</span><b>${rich(s.money)}</b>${s.detail ? `<span class="f-detail">${rich(s.detail)}</span>` : ''}</span></div>`;
       root.querySelectorAll('.seg-tabs button').forEach((btn) => btn.setAttribute('aria-selected', String(+btn.dataset.i === i)));
       paintIcons(root);
     };
@@ -153,6 +153,102 @@ const RENDER = {
         <ul>${p.features.map((f) => `<li>${icon('check')}${rich(f)}</li>`).join('')}</ul>
       </article>`).join('');
     return head(b, d) + `<div class="pricing">${free}<div class="plans">${plans}</div></div>${d.extra ? `<p class="note">${rich(d.extra)}</p>` : ''}`;
+  },
+
+  slider(b, d) {
+    const steps = d.steps || [0];
+    const groups = (d.groups || []).map((g) => `
+      <article class="pc"><h3>${icon(g.icon || 'circle')}${rich(g.who)}</h3>
+        <ul>${(g.pros || []).map((x) => `<li class="pro">${icon('plus')}<span>${rich(x)}</span></li>`).join('')}${(g.cons || []).map((x) => `<li class="con">${icon('minus')}<span>${rich(x)}</span></li>`).join('')}</ul>
+      </article>`).join('');
+    const html = head(b, d) + `<div class="disc">
+      <div class="disc-ctl">
+        <label class="mono" for="disc-range">Скидка клиенту из доли специалиста</label>
+        <input id="disc-range" type="range" min="0" max="${steps.length - 1}" step="1" value="0" aria-valuetext="0 %">
+        <div class="disc-ticks">${steps.map((x) => `<span>${x} %</span>`).join('')}</div>
+      </div>
+      <div class="disc-out"></div>
+    </div>
+    <div class="pcs">${groups}</div>
+    ${d.avoid ? `<p class="avoid">${icon('ban')}<span>${rich(d.avoid)}</span></p>` : ''}
+    ${d.verdict ? `<p class="verdict">${icon('lightbulb')}<span><span class="mono">Предлагаем</span>${rich(d.verdict)}</span></p>` : ''}`;
+    const draw = (root, i) => {
+      const pct = steps[i], off = Math.round(d.price * pct / 100), final = d.price - off, spec = d.spec - off;
+      const seg = (cls, v, label) => v > 0 ? `<div class="seg ${cls}" style="flex:${v}" tabindex="0" data-tip="${esc(`${label}: ${fmt(v)} ₽`)}"><span>${fmt(v)}</span></div>` : '';
+      root.querySelector('.disc-out').innerHTML = `
+        <div class="disc-price">${off ? `<s>${fmt(d.price)} ₽</s><span class="badge-off">−${pct} %</span>` : ''}<b>${fmt(final)} ₽</b><span class="mono">платит клиент</span></div>
+        <div class="split-bar">${seg('seg-spec', spec, 'Специалисту')}${seg('seg-platform', d.platform, 'Платформе')}${seg('seg-cost', d.cost, 'Себестоимость и эквайринг')}</div>
+        <ul class="legend">
+          <li><span class="sw seg-spec"></span><b>${fmt(spec)} ₽</b><span>специалисту${off ? ` — отдал клиенту ${fmt(off)} ₽` : ''}</span></li>
+          <li><span class="sw seg-platform"></span><b>${fmt(d.platform)} ₽</b><span>платформе — не меняется</span></li>
+          <li><span class="sw seg-cost"></span><b>${fmt(d.cost)} ₽</b><span>себестоимость и эквайринг</span></li>
+        </ul>`;
+      root.querySelector('#disc-range').setAttribute('aria-valuetext', `${pct} %`);
+    };
+    return { html, after: (root) => { const r = root.querySelector('#disc-range'); draw(root, 0); r.addEventListener('input', () => draw(root, +r.value)); } };
+  },
+
+  ramp(b, d) {
+    const mlnS = (v) => `${v < 0 ? '−' : '+'}${(Math.abs(v) / 1e6).toLocaleString('ru-RU', { maximumFractionDigits: Math.abs(v) < 1e6 ? 2 : 1 })} млн ₽`;
+    const panel = (s) => {
+      const max = Math.max(0, ...s.values), min = Math.min(0, ...s.values), range = max - min || 1, zero = max / range * 100;
+      const bars = s.values.map((v, i) => {
+        const h = Math.abs(v) / range * 100;
+        return `<span class="rb ${v < 0 ? 'neg' : 'pos'}" style="left:${(i / s.values.length * 100).toFixed(2)}%;top:${(v < 0 ? zero : zero - h).toFixed(2)}%;height:${Math.max(h, .6).toFixed(2)}%" tabindex="0" data-tip="${esc(`${s.name}, месяц ${i + 1}: ${mlnS(v)}`)}"></span>`;
+      }).join('');
+      return `<article class="rp">
+        <header><h3>${rich(s.name)}</h3><p class="rp-be ${s.breakeven ? 'ok' : 'bad'}">${icon(s.breakeven ? 'trending-up' : 'trending-down')}${s.breakeven ? `в плюсе с ${s.breakeven}-го месяца` : 'не выходит в плюс за год'}</p></header>
+        <div class="rp-chart" role="img" aria-label="${esc(`${s.name}: прибыль по месяцам от ${mlnS(s.values[0])} до ${mlnS(s.values[s.values.length - 1])}`)}">
+          <span class="rp-zero" style="top:${zero.toFixed(2)}%"></span>${bars}
+        </div>
+        <div class="rp-x mono"><span>1 мес</span><span>6</span><span>12</span></div>
+        <dl class="rp-sum"><div><dt>12-й месяц</dt><dd>${mlnS(s.values[s.values.length - 1])}</dd></div><div><dt>Итог года</dt><dd>${mlnS(s.year)}</dd></div></dl>
+        <ul class="rp-facts">${(s.facts || []).map((x) => `<li>${rich(x)}</li>`).join('')}</ul>
+      </article>`;
+    };
+    return head(b, d) + `<div class="ramp">${(d.scenarios || []).map(panel).join('')}</div>${d.note ? `<p class="note">${rich(d.note)}</p>` : ''}`;
+  },
+
+  faq(b, d) {
+    const ST = { answer: ['circle-check', 'ответ есть'], pilot: ['flask-conical', 'проверит пилот'], proposal: ['circle-help', 'предложение'], accepted: ['shield-alert', 'риск принят'] };
+    const items = d.items || [];
+    const whos = [...new Set(items.map((x) => x.who))];
+    const states = Object.keys(ST).filter((k) => items.some((x) => x.state === k));
+    const list = items.map((x) => `
+      <details class="qa st-${esc(x.state)}" data-who="${esc(x.who)}" data-state="${esc(x.state)}">
+        <summary><span class="qa-st" title="${esc(ST[x.state]?.[1] || '')}">${icon(ST[x.state]?.[0] || 'circle')}</span><span class="qa-q">${rich(x.q)}</span><span class="qa-who mono">${esc(x.who)}</span>${icon('chevron-down', 'chev')}</summary>
+        <div class="qa-a"><p>${rich(x.a)}</p>
+          ${x.check ? `<p class="qa-check">${icon('flask-conical')}<span><span class="mono">Чем проверяем</span>${rich(x.check)}</span></p>` : ''}
+          ${x.note ? `<p class="qa-note">${icon('info')}<span>${rich(x.note)}</span></p>` : ''}
+          <p class="qa-tag mono">${esc(ST[x.state]?.[1] || '')}</p></div>
+      </details>`).join('');
+    const html = head(b, d) + `
+      <div class="filters faq-f" role="group" aria-label="Фильтры возражений">
+        <div class="chips" data-f="who"><span class="mono">Кто спрашивает</span>${whos.map((w) => `<button type="button" data-v="${esc(w)}" aria-pressed="false">${esc(w)}</button>`).join('')}</div>
+        <div class="chips" data-f="state"><span class="mono">Статус</span>${states.map((k) => `<button type="button" data-v="${k}" aria-pressed="false">${icon(ST[k][0])}${ST[k][1]}</button>`).join('')}</div>
+        <button type="button" class="open-all mono">раскрыть все</button>
+        <p class="found mono" aria-live="polite">${items.length}</p>
+      </div>
+      <div class="qas">${list}</div>`;
+    const wire = (root) => {
+      const st = { who: new Set(), state: new Set() };
+      const rows = [...root.querySelectorAll('.qa')];
+      const apply = () => {
+        let n = 0;
+        rows.forEach((r) => { const on = (!st.who.size || st.who.has(r.dataset.who)) && (!st.state.size || st.state.has(r.dataset.state)); r.hidden = !on; if (on) n++; });
+        root.querySelector('.found').textContent = n === rows.length ? `${n} возражений` : `${n} из ${rows.length}`;
+      };
+      root.querySelectorAll('.chips').forEach((box) => box.addEventListener('click', (e) => {
+        const btn = e.target.closest('button'); if (!btn) return;
+        const set = st[box.dataset.f], v = btn.dataset.v;
+        set.has(v) ? set.delete(v) : set.add(v);
+        btn.classList.toggle('on', set.has(v)); btn.setAttribute('aria-pressed', set.has(v)); apply();
+      }));
+      const all = root.querySelector('.open-all');
+      all.addEventListener('click', () => { const open = all.dataset.open !== '1'; rows.forEach((r) => { r.open = open; }); all.dataset.open = open ? '1' : ''; all.textContent = open ? 'свернуть все' : 'раскрыть все'; });
+      apply();
+    };
+    return { html, after: wire };
   },
 
   tables(b, d) {

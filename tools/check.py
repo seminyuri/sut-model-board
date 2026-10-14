@@ -5,7 +5,8 @@ ROOT = os.path.join(os.path.dirname(__file__), '..', 'content')
 NEED = {"hero": ["title", "stats"], "flow": ["nodes"], "cards": ["items"], "roadmap": ["items"],
         "split": ["parts"], "funnel": ["steps", "scenarios"], "bars": ["items"], "pricing": ["plans"],
         "tables": ["tables"], "modules": ["groups"], "metrics": ["items"], "risks": ["items"],
-        "checklist": ["items"], "log": ["items"], "markdown": []}
+        "checklist": ["items"], "log": ["items"], "markdown": [],
+        "slider": ["price", "spec", "platform", "cost", "steps"], "ramp": ["scenarios"], "faq": ["items"]}
 errors = []
 def load(p):
     with open(os.path.join(ROOT, p), encoding='utf-8') as f:
@@ -37,6 +38,13 @@ for b in site.get('blocks', []):
         for s in d.get('items', []):
             for k in ['n', 'title', 'status']:
                 if k not in s: errors.append(f"{bid}: у этапа {s.get('n', '?')} нет поля {k}")
+    if t == 'slider' and isinstance(d, dict) and all(k in d for k in ('price', 'spec', 'platform', 'cost')):
+        if d['spec'] + d['platform'] + d['cost'] != d['price']: errors.append(f"{bid}: специалист + платформа + себестоимость ≠ цена")
+        if max(d.get('steps', [0])) * d['price'] / 100 > d['spec'] + 1: errors.append(f"{bid}: скидка больше доли специалиста")
+    if t == 'faq':
+        for x in d.get('items', []):
+            if x.get('state') not in ('answer', 'pilot', 'proposal', 'accepted'): errors.append(f"{bid}: у «{x.get('q')}» state должен быть answer | pilot | proposal | accepted")
+            if not x.get('q') or not x.get('a'): errors.append(f"{bid}: пустой вопрос или ответ")
     if t == 'modules':
         seen = set()
         for g in d.get('groups', []):

@@ -3,19 +3,107 @@
   "subtitle": "Рабочая доска проекта: модель, этапы, экономика, модули, решения",
   "updated": "2026-10-14",
   "blocks": [
-    { "id": "top",       "type": "hero",      "src": "blocks/hero.json" },
-    { "id": "model",     "type": "flow",      "src": "blocks/flow.json",      "nav": "Модель" },
-    { "id": "principles","type": "cards",     "src": "blocks/model.json" },
-    { "id": "stages",    "type": "roadmap",   "src": "blocks/stages.json",    "nav": "Этапы" },
-    { "id": "split",     "type": "split",     "src": "blocks/split.json",     "nav": "Экономика" },
-    { "id": "funnel",    "type": "funnel",    "src": "blocks/funnel.json" },
-    { "id": "compare",   "type": "bars",      "src": "blocks/compare.json" },
-    { "id": "pricing",   "type": "pricing",   "src": "blocks/pricing.json" },
-    { "id": "economics", "type": "tables",    "src": "blocks/economics.json", "collapsed": true },
-    { "id": "modules",   "type": "modules",   "src": "blocks/modules.json",   "nav": "Модули", "title": "Карта модулей", "lead": "Всё, что нужно специалисту, клиенту и партнёрской сети. Фильтр по этапу и приоритету, поиск." },
-    { "id": "metrics",   "type": "metrics",   "src": "blocks/metrics.json",   "nav": "Метрики" },
-    { "id": "risks",     "type": "risks",     "src": "blocks/risks.json",     "nav": "Риски" },
-    { "id": "decisions", "type": "checklist", "src": "blocks/decisions.json", "nav": "Решения" },
-    { "id": "log",       "type": "log",       "src": "blocks/log.json",       "nav": "Журнал" }
+    {
+      "id": "top",
+      "type": "hero",
+      "src": "blocks/hero.json"
+    },
+    {
+      "id": "model",
+      "type": "flow",
+      "src": "blocks/flow.json",
+      "nav": "Модель"
+    },
+    {
+      "id": "principles",
+      "type": "cards",
+      "src": "blocks/model.json"
+    },
+    {
+      "id": "channels",
+      "type": "cards",
+      "src": "blocks/channels.json"
+    },
+    {
+      "id": "stages",
+      "type": "roadmap",
+      "src": "blocks/stages.json",
+      "nav": "Этапы"
+    },
+    {
+      "id": "split",
+      "type": "split",
+      "src": "blocks/split.json",
+      "nav": "Экономика"
+    },
+    {
+      "id": "discount",
+      "type": "slider",
+      "src": "blocks/discount.json"
+    },
+    {
+      "id": "funnel",
+      "type": "funnel",
+      "src": "blocks/funnel.json"
+    },
+    {
+      "id": "ramp",
+      "type": "ramp",
+      "src": "blocks/ramp.json"
+    },
+    {
+      "id": "compare",
+      "type": "bars",
+      "src": "blocks/compare.json"
+    },
+    {
+      "id": "pricing",
+      "type": "pricing",
+      "src": "blocks/pricing.json"
+    },
+    {
+      "id": "economics",
+      "type": "tables",
+      "src": "blocks/economics.json",
+      "collapsed": true
+    },
+    {
+      "id": "modules",
+      "type": "modules",
+      "src": "blocks/modules.json",
+      "nav": "Модули",
+      "title": "Карта модулей",
+      "lead": "Всё, что нужно специалисту, клиенту и партнёрской сети. Фильтр по этапу и приоритету, поиск."
+    },
+    {
+      "id": "metrics",
+      "type": "metrics",
+      "src": "blocks/metrics.json",
+      "nav": "Метрики"
+    },
+    {
+      "id": "faq",
+      "type": "faq",
+      "src": "blocks/faq.json",
+      "nav": "Ответы"
+    },
+    {
+      "id": "risks",
+      "type": "risks",
+      "src": "blocks/risks.json",
+      "nav": "Риски"
+    },
+    {
+      "id": "decisions",
+      "type": "checklist",
+      "src": "blocks/decisions.json",
+      "nav": "Решения"
+    },
+    {
+      "id": "log",
+      "type": "log",
+      "src": "blocks/log.json",
+      "nav": "Журнал"
+    }
   ]
 }
