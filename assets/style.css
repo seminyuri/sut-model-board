@@ -20,10 +20,10 @@
 }
 
 *, *::before, *::after { box-sizing: border-box; }
-html { scroll-behavior: smooth; scroll-padding-top: calc(var(--bar) + 12px); -webkit-text-size-adjust: 100%; }
+html { overflow-x: clip; scroll-behavior: smooth; scroll-padding-top: calc(var(--bar) + 12px); -webkit-text-size-adjust: 100%; }
 body {
   margin: 0; background: var(--paper); color: var(--ink); font: 400 16px/1.6 var(--body);
-  overflow-x: hidden; text-rendering: optimizeLegibility;
+  overflow-x: hidden; overflow-x: clip; text-rendering: optimizeLegibility;
 }
 body::before { /* лёгкое зерно */
   content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: .06;
@@ -54,7 +54,7 @@ b { font-weight: 600; }
 .theme span { width: 16px; height: 16px; border-radius: 50%; background: linear-gradient(90deg, var(--ink) 50%, var(--accent) 50%); }
 
 /* ── Разделы ───────────────────────────────────── */
-.app { position: relative; z-index: 1; }
+.app { position: relative; z-index: 1; overflow-x: clip; }
 .loading, .err { max-width: var(--max); margin: 48px auto; padding: 0 var(--gutter); }
 .err { padding: 18px 20px; border: 1px solid var(--bad); border-radius: var(--r); background: color-mix(in srgb, var(--bad) 8%, var(--card)); }
 .err p { margin: 4px 0 0; }
