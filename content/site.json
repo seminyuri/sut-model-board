@@ -1,0 +1,16 @@
+{
+  "title": "Суть — модель и дорожная карта",
+  "subtitle": "Рабочая доска проекта: модель, этапы, экономика, модули, решения",
+  "updated": "2026-10-14",
+  "blocks": [
+    { "id": "top",       "type": "hero",      "src": "blocks/hero.json" },
+    { "id": "model",     "type": "cards",     "src": "blocks/model.json",     "nav": "Модель" },
+    { "id": "stages",    "type": "stages",    "src": "blocks/stages.json",    "nav": "Этапы" },
+    { "id": "economics", "type": "tables",    "src": "blocks/economics.json", "nav": "Экономика" },
+    { "id": "modules",   "type": "modules",   "src": "blocks/modules.json",   "nav": "Модули", "title": "Карта модулей", "lead": "Всё, что нужно специалисту, клиенту и партнёрской сети. Фильтр по этапу и приоритету, поиск по словам." },
+    { "id": "metrics",   "type": "metrics",   "src": "blocks/metrics.json",   "nav": "Метрики" },
+    { "id": "risks",     "type": "tables",    "src": "blocks/risks.json",     "nav": "Риски" },
+    { "id": "decisions", "type": "checklist", "src": "blocks/decisions.json", "nav": "Решения" },
+    { "id": "log",       "type": "log",       "src": "blocks/log.json",       "nav": "Журнал" }
+  ]
+}
