@@ -196,11 +196,20 @@ function revealOnScroll() {
 }
 
 function trackNav() {
-  const links = [...document.querySelectorAll('#nav a')];
+  const nav = $('#nav');
+  const links = [...nav.querySelectorAll('a')];
+  let current = '';
   const io = new IntersectionObserver((es) => es.forEach((e) => {
-    if (!e.isIntersecting) return;
-    links.forEach((a) => a.classList.toggle('on', a.getAttribute('href') === `#${e.target.id}`));
-    links.find((a) => a.classList.contains('on'))?.scrollIntoView({ inline: 'center', block: 'nearest' });
+    if (!e.isIntersecting || e.target.id === current) return;
+    current = e.target.id;
+    links.forEach((a) => a.classList.toggle('on', a.getAttribute('href') === `#${current}`));
+    // двигаем только полоску меню по горизонтали; scrollIntoView здесь нельзя —
+    // у прилипшей шапки он тянет вверх всю страницу (Safari, телефоны)
+    const a = links.find((x) => x.classList.contains('on'));
+    if (a && nav.scrollWidth > nav.clientWidth) {
+      const r = a.getBoundingClientRect(), n = nav.getBoundingClientRect();
+      nav.scrollTo({ left: nav.scrollLeft + (r.left - n.left) - (nav.clientWidth - r.width) / 2, behavior: 'smooth' });
+    }
   }), { rootMargin: '-45% 0px -50% 0px' });
   document.querySelectorAll('.sec').forEach((s) => io.observe(s));
 }
