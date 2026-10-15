@@ -127,7 +127,7 @@ i.ic { display: inline-block; } /* держит место, пока грузя�
 }
 
 /* общая поверхность */
-.st-cards article, .st-tri article, .st-tri-c, .st-bars, .st-stats li, .mn-col, .mn-levels, .mach, .card, .flow-node, .rm, .split, .funnel, .bars, .disc, .pc, .rp, .qa, .plan, .free, .metric, .risk, .msum, .filters, .mgroup, .check li, .tbl, .seq, .more, .err {
+.pt, .st-cards article, .st-tri article, .st-tri-c, .st-bars, .st-stats li, .mn-col, .mn-levels, .mach, .card, .flow-node, .rm, .split, .funnel, .bars, .disc, .pc, .rp, .qa, .plan, .free, .metric, .risk, .msum, .filters, .mgroup, .check li, .tbl, .seq, .more, .err {
   background: var(--bg-raised); border: var(--hair) solid var(--line-strong); border-radius: var(--r-l);
 }
 
@@ -329,6 +329,49 @@ i.ic { display: inline-block; } /* держит место, пока грузя�
 
 
 
+
+
+/* ---------- три портрета психологов ---------- */
+.pts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; align-items: start; }
+.pt { padding: clamp(18px, 2.4vw, 24px); display: grid; gap: 16px; }
+.pt header { display: flex; gap: 12px; align-items: center; }
+.pt header .card-ic { margin: 0; }
+.pt h3 { font-size: 18px; font-weight: 600; letter-spacing: -.01em; line-height: 1.25; }
+.pt header .mono { margin-top: 2px; text-transform: none; letter-spacing: .02em; }
+.pt-share b { font-size: 15px; font-weight: 600; color: var(--accent-strong); }
+.pt-share-bar { margin-top: 6px; height: 6px; border-radius: 999px; background: var(--bg-muted); overflow: hidden; }
+.pt-share-bar span { display: block; height: 100%; background: var(--accent); border-radius: 999px; }
+.pt-facts { margin: 0; display: grid; gap: 0; }
+.pt-facts div { display: flex; justify-content: space-between; gap: 12px; padding: 8px 0; border-bottom: var(--hair) solid var(--line); }
+.pt-facts dt { font-size: 13.5px; color: var(--text-subtle); }
+.pt-facts dd { margin: 0; font-size: 14.5px; font-weight: 600; text-align: right; }
+.pt-facts div:last-child dd { color: var(--accent-strong); font-size: 16px; }
+.pt-money .mono { text-transform: none; letter-spacing: .02em; margin-bottom: 8px; }
+.pt-bar { display: flex; gap: 2px; height: 22px; }
+.pt-seg { min-width: 3px; }
+.pt-seg:first-child { border-radius: 4px 0 0 4px; } .pt-seg:last-child { border-radius: 0 4px 4px 0; }
+.pt-seg.c0, .pt-sw.c0 { background: color-mix(in srgb, var(--c-cost) 100%, var(--text) 0%); }
+.pt-seg.c1, .pt-sw.c1 { background: color-mix(in srgb, var(--c-cost) 85%, var(--text) 15%); }
+.pt-seg.c2, .pt-sw.c2 { background: color-mix(in srgb, var(--c-cost) 70%, var(--bg) 30%); }
+.pt-seg.c3, .pt-sw.c3 { background: color-mix(in srgb, var(--c-cost) 75%, var(--text) 25%); }
+.pt-seg.c4, .pt-sw.c4 { background: color-mix(in srgb, var(--c-cost) 55%, var(--bg) 45%); }
+.pt-seg.c5, .pt-sw.c5 { background: color-mix(in srgb, var(--c-cost) 65%, var(--text) 35%); }
+.pt-seg.rest, .pt-sw.rest { background: var(--c-spec); }
+.pt-legend { list-style: none; margin: 10px 0 0; padding: 0; display: grid; gap: 4px; font-size: 13px; color: var(--text-muted); }
+.pt-legend li { display: grid; grid-template-columns: 10px 1fr auto; gap: 8px; align-items: center; }
+.pt-legend li b { color: var(--text); font-weight: 600; font-variant-numeric: tabular-nums; }
+.pt-legend li.rest { color: var(--text); font-weight: 600; }
+.pt-legend li.rest b { color: var(--c-spec); }
+.pt-sw { width: 10px; height: 10px; border-radius: 2px; }
+.pt-row { display: flex; gap: 10px; font-size: 14px; line-height: 1.5; color: var(--text-muted); }
+.pt-row > .ic { color: var(--accent); margin-top: 2px; flex: none; }
+.pt-row .mono { display: block; margin-bottom: 2px; }
+.pt-we { padding: 12px 14px; border-radius: var(--r); background: var(--accent-soft); color: var(--text); }
+.pt-anchors { margin-top: 16px; }
+.pt-anchors ul { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 6px; }
+.pt-anchors li { display: flex; gap: 8px; font-size: 14px; line-height: 1.45; color: var(--text-muted); }
+.pt-anchors li .ic { color: var(--ok); margin-top: 2px; flex: none; }
+.sec-portraits .st-call { margin-top: 16px; }
 
 /* ---------- раздел из частей (story) ---------- */
 .st-part + .st-part { margin-top: clamp(22px, 3vw, 34px); }
@@ -681,6 +724,7 @@ tbody tr:hover td { background: var(--bg-muted); }
   .free ul { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); }
 }
 @media (max-width: 900px) {
+  .pts { grid-template-columns: 1fr; }
   .st-stats { grid-template-columns: repeat(2, 1fr); }
   .st-steps { grid-template-columns: 1fr; }
   .st-tri { grid-template-columns: 1fr; grid-template-areas: "c" "a" "b" "d"; }

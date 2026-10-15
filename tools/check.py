@@ -6,7 +6,7 @@ NEED = {"hero": ["title", "stats"], "flow": ["nodes"], "cards": ["items"], "road
         "split": ["parts"], "funnel": ["steps", "scenarios"], "bars": ["items"], "pricing": ["plans"],
         "tables": ["tables"], "modules": ["groups"], "metrics": ["items"], "risks": ["items"],
         "checklist": ["items"], "log": ["items"], "markdown": [],
-        "slider": ["price", "spec", "platform", "cost", "steps"], "ramp": ["scenarios"], "faq": ["items"], "machine": ["stats", "steps"], "meaning": ["ai", "human", "levels"], "story": ["parts"]}
+        "slider": ["price", "spec", "platform", "cost", "steps"], "ramp": ["scenarios"], "faq": ["items"], "machine": ["stats", "steps"], "meaning": ["ai", "human", "levels"], "story": ["parts"], "portraits": ["items"]}
 errors = []
 def load(p):
     with open(os.path.join(ROOT, p), encoding='utf-8') as f:

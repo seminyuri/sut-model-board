@@ -27,6 +27,12 @@
       "nav": "Рынок"
     },
     {
+      "id": "portraits",
+      "type": "portraits",
+      "src": "blocks/portraits.json",
+      "nav": "Психологи"
+    },
+    {
       "id": "world",
       "type": "story",
       "src": "blocks/world.json"

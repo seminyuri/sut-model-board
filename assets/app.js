@@ -150,6 +150,31 @@ const RENDER = {
     return head(b, d) + (d.parts || []).map((x) => `<div class="st-part stp-${esc(x.kind)}">${(P[x.kind] || (() => `<div class="err">неизвестная часть «${esc(x.kind)}»</div>`))(x)}</div>`).join('');
   },
 
+  portraits(b, d) {
+    const k = (v) => String(v).replace('.', ',');
+    const card = (x) => {
+      const m = x.money || { costs: [], left: 0, base: 0 };
+      const segs = m.costs.map((c, i) => `<span class="pt-seg c${i % 6}" style="flex:${c.value}" tabindex="0" data-tip="${esc(`${c.label}: ~${k(c.value)} тыс. ₽`)}"></span>`).join('') +
+        `<span class="pt-seg rest" style="flex:${m.left}" tabindex="0" data-tip="${esc(`Остаётся: ~${k(m.left)} тыс. ₽`)}"></span>`;
+      const legend = m.costs.map((c, i) => `<li><span class="pt-sw c${i % 6}"></span>${rich(c.label)}<b>~${k(c.value)}</b></li>`).join('') +
+        `<li class="rest"><span class="pt-sw rest"></span>Остаётся<b>~${k(m.left)}</b></li>`;
+      return `<article class="pt">
+        <header><div class="card-ic">${icon(x.icon || 'user-round')}</div><div><h3>${rich(x.title)}</h3><p class="mono">${rich(x.sub)}</p></div></header>
+        <div class="pt-share"><b>${rich(x.share_text)}</b><div class="pt-share-bar"><span style="width:${x.share}%"></span></div></div>
+        <dl class="pt-facts">${x.facts.map((f) => `<div><dt>${rich(f.label)}</dt><dd>${rich(f.value)}</dd></div>`).join('')}</dl>
+        <div class="pt-money"><p class="mono">Куда уходят деньги · на ${k(m.base)} тыс. ₽ выручки, тыс. ₽</p><div class="pt-bar">${segs}</div><ul class="pt-legend">${legend}</ul></div>
+        <p class="pt-row">${icon('users')}<span><span class="mono">Где клиенты</span>${rich(x.clients)}</span></p>
+        <p class="pt-row">${icon('target')}<span><span class="mono">На что рассчитывать</span>${rich(x.expect)}</span></p>
+        <p class="pt-row pt-we">${icon('sparkles')}<span><span class="mono">Что даём мы</span>${rich(x.we)}</span></p>
+      </article>`;
+    };
+    return head(b, d) + `<div class="pts">${(d.items || []).map(card).join('')}</div>
+      ${d.insight ? `<p class="st-call tone-accent">${icon('lightbulb')}<span><span class="mono">Главное</span>${rich(d.insight)}</span></p>` : ''}
+      ${d.anchors ? `<div class="pt-anchors"><p class="mono">Подтверждённые опорные цифры</p><ul>${d.anchors.map((a) => `<li>${icon('check')}<span>${rich(a)}</span></li>`).join('')}</ul></div>` : ''}
+      ${d.check ? `<p class="note">${rich(d.check)}</p>` : ''}
+      ${d.sources ? `<p class="note st-src">Источники: ${d.sources.map((i) => `<a href="${esc(i.url)}" target="_blank" rel="noopener">${rich(i.text)}</a>`).join(' · ')}</p>` : ''}`;
+  },
+
   cards(b, d) {
     const items = (d.items || []).map((c, i) =>
       `<article class="card" style="--i:${i}">${c.icon ? `<div class="card-ic">${icon(c.icon)}</div>` : ''}${c.tag ? `<span class="tag">${rich(c.tag)}</span>` : ''}<h3>${rich(c.title)}</h3><p>${rich(c.text)}</p></article>`).join('');
