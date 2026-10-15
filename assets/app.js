@@ -236,7 +236,7 @@ const RENDER = {
 
   split(b, d) {
     const total = d.total || d.parts.reduce((s, p) => s + p.value, 0);
-    const segs = d.parts.map((p) => `<div class="seg seg-${esc(p.key)}" style="flex:${p.value}" tabindex="0" data-tip="${esc(`${p.label}: ${fmt(p.value)} ₽ (${Math.round(p.value / total * 100)} %)`)}"><span>${Math.round(p.value / total * 100)} %</span></div>`).join('');
+    const segs = d.parts.map((p) => `<div class="seg seg-${esc(p.key)}" style="flex:${p.value}" tabindex="0" data-tip="${esc(`${p.label}: ${fmt(p.value)} ₽ (${Math.round(p.value / total * 100)} %)`)}">${p.value / total >= 0.04 ? `<span>${Math.round(p.value / total * 100)} %</span>` : ''}</div>`).join('');
     const legend = d.parts.map((p) => `<li><span class="sw seg-${esc(p.key)}"></span><b>${fmt(p.value)} ₽</b><span>${rich(p.label)}${p.note ? ` · ${rich(p.note)}` : ''}</span></li>`).join('');
     const also = (d.also || []).map((a) => `<li>${icon(a.icon)}<div><b>${rich(a.label)}</b><span>${rich(a.text)}</span></div></li>`).join('');
     return head(b, d) + `<div class="split"><div class="split-total"><span class="mono">Цена книги</span><b>${fmt(total)} ₽</b></div><div class="split-bar" role="img" aria-label="${esc(d.parts.map((p) => `${p.label} ${fmt(p.value)} ₽`).join(', '))}">${segs}</div><ul class="legend">${legend}</ul></div>${also ? `<ul class="gets">${also}</ul>` : ''}`;

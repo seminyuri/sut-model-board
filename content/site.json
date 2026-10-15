@@ -51,6 +51,12 @@
       "nav": "Почему сейчас"
     },
     {
+      "id": "match",
+      "type": "story",
+      "src": "blocks/match.json",
+      "nav": "Подбор"
+    },
+    {
       "id": "school",
       "type": "story",
       "src": "blocks/school.json"
