@@ -337,7 +337,22 @@ i.ic { display: inline-block; } /* держит место, пока грузя�
 .mach-stats span { font-size: 13.5px; color: var(--text-muted); line-height: 1.35; }
 .mach-asof { margin-top: 10px; display: flex; align-items: center; gap: 6px; text-transform: none; letter-spacing: .02em; }
 .mach-asof .ic { color: var(--ok); }
-.mach-steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; counter-reset: st; }
+.mach-sub { margin-bottom: 10px; }
+.mach-conv { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.mach-conv li { padding: 16px; border-radius: var(--r); border: var(--hair) solid var(--line-strong); display: flex; flex-direction: column; gap: 6px; }
+.mach-conv li.cv-now { border: 1px solid var(--ok); background: color-mix(in srgb, var(--ok) 6%, transparent); }
+.cv-top { display: flex; justify-content: space-between; align-items: flex-start; }
+.cv-st { padding: 3px 8px; border-radius: 999px; background: var(--bg-muted); text-transform: none; letter-spacing: .02em; font-size: 11px; }
+.cv-now .cv-st { background: var(--ok); color: var(--on-mark); }
+.cv-ready .cv-st { color: var(--accent); background: var(--accent-soft); }
+.mach-conv h3 { font-size: 16.5px; font-weight: 500; display: flex; gap: 8px; align-items: baseline; }
+.mach-conv h3 .mono { font-size: 12px; }
+.mach-conv p { font-size: 14px; line-height: 1.5; color: var(--text-muted); }
+.mach-groups { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px 16px; }
+.mach-groups li { display: grid; gap: 2px; padding: 10px 0; border-top: var(--hair) solid var(--line); }
+.mach-groups b { font-size: 14.5px; font-weight: 600; }
+.mach-groups span { font-size: 13px; color: var(--text-muted); line-height: 1.45; }
+.mach-steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
 .mach-steps li { position: relative; padding: 18px; border-radius: var(--r); border: var(--hair) solid var(--line-strong); display: flex; flex-direction: column; gap: 6px; }
 .mach-steps li.paid { border: 1px solid var(--accent); background: var(--accent-soft); }
 .mstep-n { position: absolute; top: 14px; right: 16px; font-size: 12px; }
@@ -564,6 +579,7 @@ tbody tr:hover td { background: var(--bg-muted); }
 
 /* ================= адаптив ================= */
 @media (max-width: 1080px) {
+  .mach-steps { grid-template-columns: repeat(3, 1fr); }
   .mrow { grid-template-columns: 56px minmax(0, 1fr) 220px; }
   .m-facts { grid-column: 2 / -1; grid-template-columns: repeat(3, auto); justify-content: start; gap: 0 24px; }
   .m-facts div { display: flex; gap: 8px; align-items: baseline; }
@@ -572,7 +588,8 @@ tbody tr:hover td { background: var(--bg-muted); }
 }
 @media (max-width: 900px) {
   .mach-stats, .mach-gets { grid-template-columns: repeat(2, 1fr); }
-  .mach-steps { grid-template-columns: repeat(2, 1fr); }
+  .mach-steps, .mach-conv { grid-template-columns: repeat(2, 1fr); }
+  .mach-groups { grid-template-columns: repeat(2, 1fr); }
   .disc { grid-template-columns: 1fr; }
   .pcs, .ramp { grid-template-columns: 1fr; }
   .rp-chart { height: 110px; }
@@ -630,7 +647,7 @@ tbody tr:hover td { background: var(--bg-muted); }
   .log p { grid-column: 2; }
 }
 @media (max-width: 560px) {
-  .mach-steps, .mach-gets { grid-template-columns: 1fr; }
+  .mach-steps, .mach-gets, .mach-conv, .mach-groups { grid-template-columns: 1fr; }
   .mach-stats li { padding: 12px 14px; }
   .bar { gap: 8px; height: 56px; }
   html { scroll-padding-top: 64px; }

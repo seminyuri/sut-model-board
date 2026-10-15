@@ -74,7 +74,13 @@ const RENDER = {
 
   machine(b, d) {
     const num = (v) => typeof v === 'number' ? fmt(v) : esc(v);
+    const ST = { now: ['идёт сейчас', 'now'], ready: ['код готов', 'ready'], next: ['дальше', 'next'] };
     const stats = (d.stats || []).map((x, i) => `<li style="--i:${i}">${icon(x.icon || 'circle')}<b>${num(x.value)}</b><span>${rich(x.label)}</span></li>`).join('');
+    const conv = (d.conveyor || []).map((x, i) => `
+      <li class="cv-${esc(x.status || 'next')}">
+        <div class="cv-top"><span class="mstep-ic">${icon(x.icon || 'circle')}</span><span class="cv-st mono">${ST[x.status]?.[0] || ''}</span></div>
+        <h3><span class="mono">${i + 1}</span>${rich(x.title)}</h3><p>${rich(x.text)}</p>
+      </li>`).join('');
     const steps = (d.steps || []).map((x, i) => `
       <li class="${x.paid ? 'paid' : ''}">
         <span class="mstep-n mono">${String(i + 1).padStart(2, '0')}</span>
@@ -82,12 +88,14 @@ const RENDER = {
         <h3>${rich(x.title)}</h3><p>${rich(x.text)}</p>
         ${x.paid ? `<span class="mstep-tag mono">${icon('wallet')}здесь зарабатываем</span>` : ''}
       </li>`).join('');
-    const prof = (d.professions || []).map((x) => `<span>${rich(x)}</span>`).join('');
+    const groups = (d.groups || []).map((g) => `<li><b>${rich(g.title)}</b><span>${rich(g.examples)}</span></li>`).join('');
     const gets = (d.gets || []).map((g) => `<li>${icon(g.icon)}<div><b>${rich(g.who)}</b><span>${rich(g.what)}</span></div></li>`).join('');
     return head(b, d) + `<div class="mach">
-      <div class="mach-top"><ul class="mach-stats">${stats}</ul>${d.asof ? `<p class="mono mach-asof">${icon('activity')}замер на ${esc(d.asof)} · сбор идёт</p>` : ''}</div>
-      <ol class="mach-steps">${steps}</ol>
-      ${prof ? `<div class="mach-prof"><span class="mono">Кого собираем</span><div>${prof}</div></div>` : ''}
+      <div class="mach-top"><ul class="mach-stats">${stats}</ul>
+        ${d.asof ? `<p class="mono mach-asof">${icon('activity')}замер на ${esc(d.asof)} · сбор идёт${d.growth ? ` · ${rich(d.growth)}` : ''}</p>` : ''}</div>
+      ${conv ? `<div><p class="mono mach-sub">Конвейер карты</p><ol class="mach-conv">${conv}</ol></div>` : ''}
+      ${steps ? `<div><p class="mono mach-sub">Путь специалиста к нам</p><ol class="mach-steps">${steps}</ol></div>` : ''}
+      ${groups ? `<div class="mach-prof"><p class="mono mach-sub">${rich(d.groups_title || 'Кого собираем')}</p><ul class="mach-groups">${groups}</ul></div>` : ''}
     </div>${gets ? `<ul class="gets mach-gets">${gets}</ul>` : ''}${d.note ? `<p class="note">${rich(d.note)}</p>` : ''}`;
   },
 
