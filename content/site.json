@@ -21,6 +21,12 @@
       "nav": "Почему мы"
     },
     {
+      "id": "founder",
+      "type": "story",
+      "src": "blocks/founder.json",
+      "nav": "Путь"
+    },
+    {
       "id": "engine",
       "type": "engine",
       "src": "blocks/engine.json",
