@@ -6,7 +6,7 @@ NEED = {"hero": ["title", "stats"], "flow": ["nodes"], "cards": ["items"], "road
         "split": ["parts"], "funnel": ["steps", "scenarios"], "bars": ["items"], "pricing": ["plans"],
         "tables": ["tables"], "modules": ["groups"], "metrics": ["items"], "risks": ["items"],
         "checklist": ["items"], "log": ["items"], "markdown": [],
-        "slider": ["price", "spec", "platform", "cost", "steps"], "ramp": ["scenarios"], "faq": ["items"], "machine": ["stats", "steps"], "meaning": ["ai", "human", "levels"], "story": ["parts"], "portraits": ["items"]}
+        "slider": ["price", "spec", "platform", "cost", "steps"], "ramp": ["scenarios"], "faq": ["items"], "machine": ["stats", "steps"], "meaning": ["ai", "human", "levels"], "story": ["parts"], "portraits": ["items"], "engine": ["stats", "steps"]}
 errors = []
 def load(p):
     with open(os.path.join(ROOT, p), encoding='utf-8') as f:
@@ -57,5 +57,23 @@ for b in site.get('blocks', []):
                     if not r.get(k): errors.append(f"модуль {r.get('id','?')}: пустое поле {k}")
                 if r.get('id') in seen: errors.append(f"модуль повторяется: {r.get('id')}")
                 seen.add(r.get('id'))
+        # этапы модулей — только номера из блока «Этапы»
+        if b.get('stages_src'):
+            try: known = {str(x.get('n')) for x in load(b['stages_src']).get('items', [])}
+            except Exception as e: known = set(); errors.append(f"{bid}: {b['stages_src']} — {e}")
+            for g in d.get('groups', []):
+                for r in g.get('rows', []):
+                    bad = [c for c in str(r.get('stage', '')) if c.isdigit() and c not in known]
+                    if bad: errors.append(f"модуль {r.get('id')}: этапа {''.join(bad)} нет в {b['stages_src']}")
+        for pr in d.get('personas', []):
+            for k in ['id', 'name', 'picks']:
+                if not pr.get(k): errors.append(f"{bid}: у вкладки {pr.get('id','?')} пустое поле {k}")
+            for x in pr.get('picks', []):
+                if x.get('id') not in seen: errors.append(f"{bid}: вкладка «{pr.get('name')}» ссылается на модуль {x.get('id')}, которого нет")
+    if t == 'engine':
+        sv = d.get('sieve')
+        if sv:
+            for r in sv.get('rows', []):
+                if not 0 <= r.get('hits', -1) <= sv.get('total', 0): errors.append(f"{bid}: в сите hits вне 0…total")
 print("\n".join(errors) if errors else f"Всё в порядке: {len(ids)} разделов.")
 sys.exit(1 if errors else 0)

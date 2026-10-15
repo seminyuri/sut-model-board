@@ -175,6 +175,24 @@ const RENDER = {
       ${d.sources ? `<p class="note st-src">Источники: ${d.sources.map((i) => `<a href="${esc(i.url)}" target="_blank" rel="noopener">${rich(i.text)}</a>`).join(' · ')}</p>` : ''}`;
   },
 
+  engine(b, d) {
+    const stats = `<ul class="st-stats eg-stats">${(d.stats || []).map((i) => `<li>${icon(i.icon || 'circle')}<b>${rich(i.value)}</b><span>${rich(i.label)}</span></li>`).join('')}</ul>`;
+    const steps = `<ol class="eg-flow">${(d.steps || []).map((s, k) => `
+      <li><div class="eg-ic">${icon(s.icon || 'circle')}</div><span class="mono">шаг ${k + 1}</span><h4>${rich(s.title)}</h4><p>${rich(s.text)}</p>${s.size ? `<span class="eg-size mono">${rich(s.size)}</span>` : ''}</li>`).join('')}</ol>`;
+    const sv = d.sieve;
+    const sieve = sv ? `<div class="eg-sieve"><h3 class="st-h">${rich(sv.title)}</h3>${sv.rows.map((r) => {
+      const pass = r.hits > sv.threshold;
+      const dots = Array.from({ length: sv.total }, (_, i) => `<span class="${i < r.hits ? 'on' : ''} ${i === sv.threshold ? 'cut' : ''}"></span>`).join('');
+      return `<div class="eg-row ${pass ? 'pass' : 'fail'}"><div class="eg-dots" role="img" aria-label="${esc(`${r.hits} из ${sv.total} школ, порог — больше ${sv.threshold}`)}">${dots}</div>
+        <div class="eg-verdict">${icon(pass ? 'circle-check' : 'circle-x')}<b>${rich(r.label)}</b><span>${rich(r.text)}</span></div></div>`;
+    }).join('')}<p class="eg-legend mono"><span class="eg-cut-mark"></span>порог: больше ${esc(sv.threshold)} школ из ~${esc(sv.total)}</p>${sv.note ? `<p class="note">${rich(sv.note)}</p>` : ''}</div>` : '';
+    const side = (x, cls) => `<article class="eg-side ${cls}"><h4>${icon(x.icon || 'circle')}${rich(x.title)}</h4><ul>${x.items.map((i) => `<li>${icon(cls === 'ours' ? 'check' : 'minus')}<span>${rich(i)}</span></li>`).join('')}</ul></article>`;
+    const cmp = d.compare ? `<h3 class="st-h">${rich(d.compare.title)}</h3><div class="eg-cmp">${side(d.compare.left, 'them')}${side(d.compare.right, 'ours')}</div>` : '';
+    const c = d.callout;
+    const call = c ? `<p class="st-call tone-${esc(c.tone || 'accent')}">${icon(c.icon || 'info')}<span>${c.label ? `<span class="mono">${rich(c.label)}</span>` : ''}${rich(c.text)}</span></p>` : '';
+    return head(b, d) + stats + steps + sieve + cmp + call + (d.note ? `<p class="note">${rich(d.note)}</p>` : '');
+  },
+
   cards(b, d) {
     const items = (d.items || []).map((c, i) =>
       `<article class="card" style="--i:${i}">${c.icon ? `<div class="card-ic">${icon(c.icon)}</div>` : ''}${c.tag ? `<span class="tag">${rich(c.tag)}</span>` : ''}<h3>${rich(c.title)}</h3><p>${rich(c.text)}</p></article>`).join('');
@@ -367,14 +385,39 @@ const RENDER = {
     return head(b, d) + body;
   },
 
-  modules(b, d) {
+  async modules(b, d) {
     const groups = d.groups || [];
-    const stages = ['0', '1', '2', '3', '4'];
+    // этапы — из блока «Этапы» (один источник правды), иначе 0…5
+    let stageInfo = [];
+    if (b.stages_src) { try { stageInfo = (await load(b.stages_src)).items || []; } catch (e) { stageInfo = []; } }
+    const stages = stageInfo.length ? stageInfo.map((x) => String(x.n)) : ['0', '1', '2', '3', '4', '5'];
+    const sName = (n) => stageInfo.find((x) => String(x.n) === n)?.short || '';
     const all = groups.flatMap((g) => g.rows);
+    const byId = Object.fromEntries(all.map((r) => [r.id, r]));
     const total = all.length;
+    const first = (st) => String(st).trim().match(/\d/)?.[0] || '0';
+
+    // вкладки «что получает специалист»: модули из карты, разложенные по этапам
+    const personas = d.personas || [];
+    const tabs = personas.length ? `<div class="sp-tabs" role="tablist" aria-label="Кто вы">${personas.map((p, i) => `
+      <button type="button" role="tab" class="sp-tab" aria-selected="${i === 1}" data-i="${i}">${icon(p.icon || 'user-round')}<span><b>${rich(p.name)}</b><span class="mono">${rich(p.sub)} · ${rich(p.share)}</span></span></button>`).join('')}</div>` : '';
+    const panels = personas.map((p, i) => {
+      const picks = (p.picks || []).filter((x) => byId[x.id]);
+      const ladder = stages.map((s) => {
+        const here = picks.filter((x) => first(byId[x.id].stage) === s);
+        if (!here.length) return '';
+        const cur = stageInfo.find((x) => String(x.n) === s)?.status === 'сейчас';
+        return `<li class="sp-stage ${cur ? 'now' : ''}"><div class="sp-st-h"><span class="sp-st-n">${esc(s)}</span><span><span class="mono">Этап ${esc(s)}${cur ? ' · сейчас' : ''}</span><b>${rich(sName(s))}</b></span></div>
+          <ul class="sp-items">${here.map((x) => { const r = byId[x.id]; return `<li><span class="mono sp-id">${esc(r.id)}</span><div><b>${rich(r.name)}</b><p>${rich(x.why)}</p></div><span class="sp-price">${rich(r.price)}</span></li>`; }).join('')}</ul></li>`;
+      }).join('');
+      return `<div class="sp-panel" role="tabpanel" data-i="${i}" ${i === 1 ? '' : 'hidden'}>
+        <div class="sp-top"><p class="sp-pitch">${rich(p.pitch)}</p>${p.money ? `<p class="sp-money">${icon('wallet')}<span>${rich(p.money)}</span></p>` : ''}</div>
+        <ol class="sp-ladder">${ladder}</ol></div>`;
+    }).join('');
+
     // сводка: модули по этапам, разбитые по приоритету
-    const byStage = stages.map((s) => ({ s, p: ['🔴', '🟡', '⚪'].map((p) => all.filter((r) => r.stage.trim().startsWith(s) && r.priority === p).length) }));
-    const maxS = Math.max(...byStage.map((x) => x.p.reduce((a, c) => a + c, 0)));
+    const byStage = stages.map((s) => ({ s, p: ['🔴', '🟡', '⚪'].map((p) => all.filter((r) => first(r.stage) === s && r.priority === p).length) }));
+    const maxS = Math.max(1, ...byStage.map((x) => x.p.reduce((a, c) => a + c, 0)));
     const summary = `<div class="msum"><div class="msum-bars">${byStage.map(({ s, p }) => {
       const sum = p.reduce((a, c) => a + c, 0);
       return `<div class="msum-col"><div class="msum-stack" style="height:${sum / maxS * 100}%">${p.map((n, k) => n ? `<span class="pri-bg-${k + 1}" style="flex:${n}" tabindex="0" data-tip="${esc(`Этап ${s}: ${n} — ${['без этого не стартуем', 'важно', 'позже'][k]}`)}"></span>` : '').join('')}</div><b>${sum}</b><span class="mono">этап ${s}</span></div>`;
@@ -394,7 +437,7 @@ const RENDER = {
             </dl>
           </article>`).join('')}</div>
       </details>`).join('');
-    const html = head(b, d) + summary + `
+    const catalog = summary + `
       <div class="filters" role="group" aria-label="Фильтры модулей">
         <label class="search">${icon('search')}<input type="search" placeholder="Поиск: касса, книга, лендинг…" aria-label="Поиск модулей"></label>
         <div class="chips" data-f="stage"><span class="mono">Этап</span>${stages.map((s) => `<button type="button" data-v="${s}" aria-pressed="false">${s}</button>`).join('')}</div>
@@ -402,7 +445,10 @@ const RENDER = {
         <p class="found mono" aria-live="polite">${total} модулей</p>
       </div>
       <div class="mlist">${body}</div>`;
-    return { html, after: (root) => wireModules(root, total) };
+    const html = head(b, d) + (personas.length
+      ? `<div class="sp">${tabs}${panels}</div><details class="more sp-all"><summary>${icon('layout-grid')}<span>Полная карта: все ${total} модулей</span><span class="mono">этапы, цены, приоритет, поиск</span>${icon('chevron-down', 'chev')}</summary><div class="more-body">${catalog}</div></details>`
+      : catalog);
+    return { html, after: (root) => { wireModules(root, total); wireTabs(root, '.sp-tab', '.sp-panel'); } };
   },
 
   metrics(b, d) {
@@ -463,6 +509,29 @@ function wireRoadmap(root) {
   });
 }
 
+// '0–5' или '1–4' — диапазон; '2' — один этап
+function stageHas(st, s) {
+  const n = String(st).match(/\d/g)?.map(Number) || [];
+  if (!n.length) return false;
+  return /[–-]/.test(st) ? +s >= Math.min(...n) && +s <= Math.max(...n) : n.includes(+s);
+}
+
+function wireTabs(root, tabSel, panelSel) {
+  const tabs = [...root.querySelectorAll(tabSel)];
+  const panels = [...root.querySelectorAll(panelSel)];
+  if (!tabs.length) return;
+  const show = (i) => {
+    tabs.forEach((t) => t.setAttribute('aria-selected', String(+t.dataset.i === i)));
+    panels.forEach((p) => { p.hidden = +p.dataset.i !== i; });
+  };
+  tabs.forEach((t) => t.addEventListener('click', () => show(+t.dataset.i)));
+  tabs[0].parentElement.addEventListener('keydown', (e) => {
+    const cur = tabs.findIndex((t) => t.getAttribute('aria-selected') === 'true');
+    const next = e.key === 'ArrowRight' ? cur + 1 : e.key === 'ArrowLeft' ? cur - 1 : -1;
+    if (next >= 0 && next < tabs.length) { e.preventDefault(); show(next); tabs[next].focus(); }
+  });
+}
+
 function wireModules(root, total) {
   const state = { stage: new Set(), prio: new Set(), q: '' };
   const rows = [...root.querySelectorAll('.mrow')];
@@ -470,7 +539,7 @@ function wireModules(root, total) {
     let shown = 0;
     rows.forEach((r) => {
       const st = r.dataset.stage;
-      const okStage = !state.stage.size || [...state.stage].some((s) => st.includes(s));
+      const okStage = !state.stage.size || [...state.stage].some((s) => stageHas(st, s));
       const okPrio = !state.prio.size || state.prio.has(r.dataset.prio);
       const okQ = !state.q || r.dataset.text.includes(state.q);
       const on = okStage && okPrio && okQ;
