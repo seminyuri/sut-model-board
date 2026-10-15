@@ -21,6 +21,22 @@
       "nav": "Почему мы"
     },
     {
+      "id": "market",
+      "type": "story",
+      "src": "blocks/market.json",
+      "nav": "Рынок"
+    },
+    {
+      "id": "world",
+      "type": "story",
+      "src": "blocks/world.json"
+    },
+    {
+      "id": "school",
+      "type": "story",
+      "src": "blocks/school.json"
+    },
+    {
       "id": "principles",
       "type": "cards",
       "src": "blocks/model.json"

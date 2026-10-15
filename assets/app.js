@@ -131,6 +131,25 @@ const RENDER = {
       ${d.source ? `<p class="note">Источник: <a href="${esc(d.source.url)}" target="_blank" rel="noopener">${rich(d.source.text)}</a></p>` : ''}`;
   },
 
+  // Раздел из частей: lead, stats, cards, list, steps, bars, triangle, callout, sources (описание — _help в файле)
+  story(b, d) {
+    const P = {
+      lead: (x) => `<p class="st-lead">${rich(x.text)}</p>`,
+      stats: (x) => `<ul class="st-stats">${x.items.map((i) => `<li>${icon(i.icon || 'circle')}<b>${typeof i.value === 'number' ? fmt(i.value) : rich(i.value)}</b><span>${rich(i.label)}</span></li>`).join('')}</ul>`,
+      cards: (x) => `${x.title ? `<h3 class="st-h">${rich(x.title)}</h3>` : ''}<div class="st-cards">${x.items.map((i) => `<article>${i.icon ? `<div class="card-ic">${icon(i.icon)}</div>` : ''}<h4>${rich(i.title)}</h4><p>${rich(i.text)}</p></article>`).join('')}</div>`,
+      list: (x) => `${x.title ? `<h3 class="st-h">${rich(x.title)}</h3>` : ''}<ul class="st-list">${x.items.map((i) => `<li>${icon(i.icon || 'dot')}<div><b>${rich(i.title)}</b>${i.text ? `<span>${rich(i.text)}</span>` : ''}</div></li>`).join('')}</ul>`,
+      steps: (x) => `${x.title ? `<h3 class="st-h">${rich(x.title)}</h3>` : ''}<ol class="st-steps">${x.items.map((i, k) => `<li><span class="mono">${k + 1}</span><b>${rich(i.title)}</b><p>${rich(i.text)}</p></li>`).join('')}</ol>`,
+      bars: (x) => {
+        const max = Math.max(...x.items.map((i) => i.value));
+        return `${x.title ? `<h3 class="st-h">${rich(x.title)}</h3>` : ''}<div class="st-bars">${x.items.map((i) => `<div class="b-row ${i.hl ? 'ours' : ''}"><span class="b-label">${rich(i.label)}</span><div class="b-track"><span style="width:${i.value / max * 100}%" tabindex="0" data-tip="${esc(`${i.label}: ${String(i.value).replace('.', ',')} ${x.unit || ''}`)}"></span></div><b class="b-val">${String(i.value).replace('.', ',')}</b></div>`).join('')}${x.unit ? `<p class="mono st-unit">${esc(x.unit)}</p>` : ''}</div>${x.note ? `<p class="note">${rich(x.note)}</p>` : ''}`;
+      },
+      triangle: (x) => `${x.title ? `<h3 class="st-h">${rich(x.title)}</h3>` : ''}<div class="st-tri"><div class="st-tri-c">${icon('sparkles')}<b>${rich(x.center)}</b></div>${x.items.map((i, k) => `<article class="st-tri-${k}">${icon(i.icon || 'circle')}<b>${rich(i.who)}</b><p>${rich(i.text)}</p></article>`).join('')}</div>`,
+      callout: (x) => `<p class="st-call tone-${esc(x.tone || 'muted')}">${icon(x.icon || 'info')}<span>${x.label ? `<span class="mono">${rich(x.label)}</span>` : ''}${rich(x.text)}</span></p>`,
+      sources: (x) => `<p class="note st-src">Источники: ${x.items.map((i) => `<a href="${esc(i.url)}" target="_blank" rel="noopener">${rich(i.text)}</a>`).join(' · ')}</p>`,
+    };
+    return head(b, d) + (d.parts || []).map((x) => `<div class="st-part stp-${esc(x.kind)}">${(P[x.kind] || (() => `<div class="err">неизвестная часть «${esc(x.kind)}»</div>`))(x)}</div>`).join('');
+  },
+
   cards(b, d) {
     const items = (d.items || []).map((c, i) =>
       `<article class="card" style="--i:${i}">${c.icon ? `<div class="card-ic">${icon(c.icon)}</div>` : ''}${c.tag ? `<span class="tag">${rich(c.tag)}</span>` : ''}<h3>${rich(c.title)}</h3><p>${rich(c.text)}</p></article>`).join('');

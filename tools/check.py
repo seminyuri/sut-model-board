@@ -6,7 +6,7 @@ NEED = {"hero": ["title", "stats"], "flow": ["nodes"], "cards": ["items"], "road
         "split": ["parts"], "funnel": ["steps", "scenarios"], "bars": ["items"], "pricing": ["plans"],
         "tables": ["tables"], "modules": ["groups"], "metrics": ["items"], "risks": ["items"],
         "checklist": ["items"], "log": ["items"], "markdown": [],
-        "slider": ["price", "spec", "platform", "cost", "steps"], "ramp": ["scenarios"], "faq": ["items"], "machine": ["stats", "steps"], "meaning": ["ai", "human", "levels"]}
+        "slider": ["price", "spec", "platform", "cost", "steps"], "ramp": ["scenarios"], "faq": ["items"], "machine": ["stats", "steps"], "meaning": ["ai", "human", "levels"], "story": ["parts"]}
 errors = []
 def load(p):
     with open(os.path.join(ROOT, p), encoding='utf-8') as f:
@@ -45,6 +45,10 @@ for b in site.get('blocks', []):
         for x in d.get('items', []):
             if x.get('state') not in ('answer', 'pilot', 'proposal', 'accepted'): errors.append(f"{bid}: у «{x.get('q')}» state должен быть answer | pilot | proposal | accepted")
             if not x.get('q') or not x.get('a'): errors.append(f"{bid}: пустой вопрос или ответ")
+    if t == 'story':
+        kinds = {'lead', 'stats', 'cards', 'list', 'steps', 'bars', 'triangle', 'callout', 'sources'}
+        for x in d.get('parts', []):
+            if x.get('kind') not in kinds: errors.append(f"{bid}: неизвестная часть «{x.get('kind')}» (можно: {', '.join(sorted(kinds))})")
     if t == 'modules':
         seen = set()
         for g in d.get('groups', []):

@@ -127,7 +127,7 @@ i.ic { display: inline-block; } /* держит место, пока грузя�
 }
 
 /* общая поверхность */
-.mn-col, .mn-levels, .mach, .card, .flow-node, .rm, .split, .funnel, .bars, .disc, .pc, .rp, .qa, .plan, .free, .metric, .risk, .msum, .filters, .mgroup, .check li, .tbl, .seq, .more, .err {
+.st-cards article, .st-tri article, .st-tri-c, .st-bars, .st-stats li, .mn-col, .mn-levels, .mach, .card, .flow-node, .rm, .split, .funnel, .bars, .disc, .pc, .rp, .qa, .plan, .free, .metric, .risk, .msum, .filters, .mgroup, .check li, .tbl, .seq, .more, .err {
   background: var(--bg-raised); border: var(--hair) solid var(--line-strong); border-radius: var(--r-l);
 }
 
@@ -328,6 +328,53 @@ i.ic { display: inline-block; } /* держит место, пока грузя�
 
 
 
+
+
+/* ---------- раздел из частей (story) ---------- */
+.st-part + .st-part { margin-top: clamp(22px, 3vw, 34px); }
+.st-h { font-size: clamp(19px, 2.2vw, 24px); font-weight: 400; margin-bottom: 14px; max-width: 860px; }
+.st-lead { font-size: clamp(16px, 1.7vw, 19px); line-height: 1.55; max-width: 820px; }
+.st-stats { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.st-stats li { padding: 18px; display: grid; gap: 4px; align-content: start; }
+.st-stats li > .ic { color: var(--accent); font-size: 18px; }
+.st-stats b { font-size: clamp(24px, 3vw, 34px); font-weight: 300; letter-spacing: -.02em; line-height: 1.1; }
+.st-stats span { font-size: 13.5px; color: var(--text-muted); line-height: 1.4; }
+.st-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 12px; }
+.st-cards article { padding: 20px; display: flex; flex-direction: column; gap: 6px; }
+.st-cards h4 { font-size: 16.5px; font-weight: 600; letter-spacing: -.01em; }
+.st-cards p { font-size: 14.5px; line-height: 1.5; color: var(--text-muted); }
+.st-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; max-width: 900px; }
+.st-list li { display: flex; gap: 14px; padding: 14px 0; border-bottom: var(--hair) solid var(--line); }
+.st-list li:last-child { border-bottom: 0; }
+.st-list li > .ic { color: var(--accent); font-size: 20px; margin-top: 2px; }
+.st-list b { display: block; font-size: 16px; font-weight: 600; }
+.st-list span { display: block; margin-top: 2px; font-size: 15px; line-height: 1.5; color: var(--text-muted); }
+.st-steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.st-steps li { padding: 20px; border-radius: var(--r); border: var(--hair) solid var(--line-strong); display: grid; gap: 6px; align-content: start; }
+.st-steps li:last-child { border: 1px solid var(--accent); background: var(--accent-soft); }
+.st-steps li .mono { width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; background: var(--accent); color: var(--on-mark); font-size: 12px; }
+.st-steps b { font-size: 16.5px; font-weight: 600; }
+.st-steps p { font-size: 14.5px; line-height: 1.5; color: var(--text-muted); }
+.st-bars { padding: clamp(14px, 3vw, 24px); display: grid; gap: 4px; }
+.st-bars .b-row { grid-template-columns: 300px 1fr 64px; grid-template-areas: "l t v"; }
+.st-unit { text-align: right; text-transform: none; }
+.st-tri { display: grid; grid-template-columns: 1fr 1fr 1fr; grid-template-areas: "c c c" "a b d"; gap: 12px; }
+.st-tri-c { grid-area: c; padding: 16px; display: flex; align-items: center; justify-content: center; gap: 10px; background: var(--accent); border-color: var(--accent); color: var(--on-mark); font-size: 17px; }
+.st-tri article { padding: 20px; display: grid; gap: 6px; align-content: start; }
+.st-tri-0 { grid-area: a; } .st-tri-1 { grid-area: b; } .st-tri-2 { grid-area: d; }
+.st-tri article > .ic { color: var(--accent); font-size: 22px; }
+.st-tri article b { font-size: 16.5px; }
+.st-tri article p { font-size: 14.5px; line-height: 1.5; color: var(--text-muted); }
+.st-call { display: flex; gap: 14px; padding: 18px 20px; border-radius: var(--r); font-size: 16px; line-height: 1.55; max-width: 900px; }
+.st-call > .ic { font-size: 20px; margin-top: 3px; flex: none; }
+.st-call .mono { display: block; margin-bottom: 4px; }
+.st-call.tone-accent { background: var(--accent); color: var(--on-mark); font-size: clamp(17px, 2vw, 20px); }
+.st-call.tone-accent .mono { color: var(--on-mark); opacity: .8; }
+.st-call.tone-muted { background: var(--bg-muted); }
+.st-call.tone-muted > .ic { color: var(--accent); }
+.st-call.tone-ok { background: color-mix(in srgb, var(--ok) 8%, transparent); }
+.st-call.tone-ok > .ic { color: var(--ok); }
+.st-src a { color: var(--text-muted); }
 
 /* ---------- что останется человеку ---------- */
 .mn-split { font-size: clamp(16px, 1.7vw, 19px); line-height: 1.55; max-width: 820px; margin: -8px 0 20px; }
@@ -634,6 +681,10 @@ tbody tr:hover td { background: var(--bg-muted); }
   .free ul { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); }
 }
 @media (max-width: 900px) {
+  .st-stats { grid-template-columns: repeat(2, 1fr); }
+  .st-steps { grid-template-columns: 1fr; }
+  .st-tri { grid-template-columns: 1fr; grid-template-areas: "c" "a" "b" "d"; }
+  .st-bars .b-row { grid-template-columns: 1fr 56px; grid-template-areas: "l v" "t t"; row-gap: 6px; }
   .mn-cols { grid-template-columns: 1fr; }
   .mn-lv-grid { grid-template-columns: 1fr; }
   .mach-stats, .mach-gets { grid-template-columns: repeat(2, 1fr); }
