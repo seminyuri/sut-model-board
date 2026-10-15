@@ -1,5 +1,5 @@
 {
-  "title": "50 млрд ₽ — это крохи. Проблемы огромные, а решают их плохо",
+  "title": "~80 млрд ₽ в год — это крохи. Проблемы огромные, а решают их плохо",
   "lead": "Рынок маленький не потому, что проблем мало, а потому, что их плохо решают. Проблемы никуда не денутся — рынок вырастет у того, кто решает.",
   "_help": "parts — части раздела по порядку. kind: lead (text) · stats (items: value, label, icon) · cards (title, items: icon, title, text) · list (title, items: icon, title, text) · steps (title, items: title, text) · bars (title, unit, items: label, value, hl), note · triangle (title, center, items: who, icon, text) · callout (icon, tone: accent | muted | ok | note, label, text) · sources (items: text, url).",
   "parts": [
@@ -7,8 +7,8 @@
       "kind": "stats",
       "items": [
         {
-          "value": "~50 млрд ₽",
-          "label": "в год люди уже платят за психологические услуги (2024)",
+          "value": "~80 млрд ₽",
+          "label": "в год люди платят за психологическую помощь — средняя из пяти оценок с ростом ~15 % на 2025 год",
           "icon": "wallet"
         },
         {
@@ -27,6 +27,39 @@
           "icon": "user-x"
         }
       ]
+    },
+    {
+      "kind": "bars",
+      "title": "Оценки размера рынка расходятся — берём среднюю",
+      "unit": "млрд ₽, 2024",
+      "items": [
+        {
+          "label": "Консультации психологов (ГидМаркет, BusinesStat)",
+          "value": 49.7
+        },
+        {
+          "label": "Расчёт снизу: специалисты × сессии × чек",
+          "value": 52
+        },
+        {
+          "label": "Консультации + коммерческая психотерапия (Eqiva — 20,5)",
+          "value": 70.2
+        },
+        {
+          "label": "Широкая оценка с корпоративными программами — низ",
+          "value": 88.3
+        },
+        {
+          "label": "Широкая оценка с корпоративными программами — верх",
+          "value": 100
+        },
+        {
+          "label": "Средняя из пяти оценок",
+          "value": 72,
+          "hl": true
+        }
+      ],
+      "note": "Источники считают разное: одни — только консультации психологов, другие добавляют медицинскую психотерапию и корпоративные программы. Средняя — ~72 млрд ₽ за 2024 год; при прогнозе роста ~15 % в год (BusinesStat, Eqiva) — ~80 млрд ₽ за 2025 год."
     },
     {
       "kind": "cards",
@@ -142,8 +175,31 @@
       "note": "Выручка за 2025 год по налоговой отчётности. У Московского института психоанализа прибыль — 1,8 млрд ₽."
     },
     {
+      "kind": "callout",
+      "icon": "graduation-cap",
+      "tone": "accent",
+      "label": "Свежая цифра за 2025 год",
+      "text": "Оборот онлайн-курсов по психологии — 33,7 млрд ₽, в 3,2 раза больше, чем в 2020-м; почти треть — программы для самих психологов (исследование Ясно и GetCourse, 2026). Обучение — самая быстрорастущая часть отрасли."
+    },
+    {
       "kind": "sources",
       "items": [
+        {
+          "text": "ГидМаркет/BusinesStat: 49,7 млрд ₽ (РБК)",
+          "url": "https://marketing.rbc.ru/articles/15657/"
+        },
+        {
+          "text": "Forbes: Eqiva, психотерапия 20,5 млрд ₽",
+          "url": "https://www.forbes.ru/healthcare/535845-stigma-snizilas-rynok-uslug-dla-mental-nogo-zdorov-a-vyros-za-god-pocti-na-20"
+        },
+        {
+          "text": "Zigmund: широкие оценки 88–100 млрд ₽",
+          "url": "https://zigmund.online/journal/opora/onlajn-psihologiya-v-rossii/"
+        },
+        {
+          "text": "Коммерсантъ: обучение психологии 33,7 млрд ₽ (2025)",
+          "url": "https://www.kommersant.ru/doc/8710867"
+        },
         {
           "text": "ВЦИОМ: одиночество, 2025",
           "url": "https://wciom.ru/analytical-reviews/analiticheskii-obzor/odin-doma-po-russki"
