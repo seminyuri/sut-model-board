@@ -15,6 +15,12 @@
       "nav": "Модель"
     },
     {
+      "id": "meaning",
+      "type": "meaning",
+      "src": "blocks/meaning.json",
+      "nav": "Почему мы"
+    },
+    {
       "id": "principles",
       "type": "cards",
       "src": "blocks/model.json"

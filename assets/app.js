@@ -99,6 +99,38 @@ const RENDER = {
     </div>${gets ? `<ul class="gets mach-gets">${gets}</ul>` : ''}${d.note ? `<p class="note">${rich(d.note)}</p>` : ''}`;
   },
 
+  meaning(b, d) {
+    const col = (c, cls, ic) => c ? `<div class="mn-col ${cls}"><h3>${icon(ic)}${rich(c.title)}</h3><ul>${(c.items || []).map((x) => `<li>${icon('check')}<span>${rich(x)}</span></li>`).join('')}</ul></div>` : '';
+    const chain = (d.chain || []).map((x, i) => `${i ? icon('arrow-right', 'mn-arr') : ''}<span>${rich(x)}</span>`).join('');
+    const lv = d.levels || [];
+    const n = lv.length, R = 150, r0 = 30, step = n > 1 ? (R - r0) / (n - 1) : 0;
+    const rings = lv.map((_, i) => n - 1 - i).map((i) => {
+      const r = r0 + i * step;
+      return `<circle class="mn-ring ${i === 0 ? 'core' : ''}" cx="160" cy="160" r="${r.toFixed(1)}" style="--o:${(1 - i / n * 0.75).toFixed(2)}"/>` +
+        `<text class="mn-ring-n" x="160" y="${(160 - r + (i === 0 ? 34 : 13)).toFixed(1)}">${i + 1}</text>`;
+    }).join('');
+    const legend = lv.map((x, i) => `<li class="${i === 0 ? 'core' : ''}"><span class="mono">${i + 1}</span>${rich(x)}</li>`).join('');
+    const cmp = d.compare ? `<div class="mn-cmp"><table><thead><tr>${d.compare.cols.map((c) => `<th>${rich(c)}</th>`).join('')}</tr></thead><tbody>${d.compare.rows.map((r) => `<tr>${r.map((c, j) => `<td data-l="${esc(d.compare.cols[j])}">${rich(c)}</td>`).join('')}</tr>`).join('')}</tbody></table>${d.compare.note ? `<p class="note">${rich(d.compare.note)}</p>` : ''}</div>` : '';
+    const path = (d.path || []).map((x, i) => `<li class="${i === (d.path.length - 1) ? 'goal' : ''}"><span class="mono">${i + 1}</span>${rich(x)}</li>`).join('');
+    return head(b, d) + `
+      ${d.split_title ? `<p class="mn-split">${rich(d.split_title)}</p>` : ''}
+      <div class="mn-cols">${col(d.ai, 'ai', 'cpu')}${col(d.human, 'human', 'heart-handshake')}</div>
+      ${chain ? `<p class="mn-chain">${chain}</p>` : ''}
+      ${d.quote ? `<blockquote class="mn-quote"><p>«${rich(d.quote.text)}»</p><cite>${rich(d.quote.who)}</cite></blockquote>` : ''}
+      ${n ? `<div class="mn-levels">
+        <h3>${rich(d.levels_title || '')}</h3>
+        <div class="mn-lv-grid">
+          <svg class="mn-rings" viewBox="0 0 320 320" role="img" aria-label="${esc('Семь уровней человека: ' + lv.join(', '))}">${rings}</svg>
+          <div><ol class="mn-legend">${legend}</ol>${d.levels_note ? `<p class="mn-lv-note">${rich(d.levels_note)}</p>` : ''}</div>
+        </div>
+        ${cmp}
+      </div>` : ''}
+      ${path ? `<div class="mn-path"><p class="mono">Наш путь</p><ol>${path}</ol></div>` : ''}
+      ${d.scarcity ? `<p class="mn-scar">${icon('sparkles')}<span>${rich(d.scarcity)}</span></p>` : ''}
+      ${d.plus ? `<p class="mn-plus">${icon('shield-check')}<span>${rich(d.plus)}</span></p>` : ''}
+      ${d.source ? `<p class="note">Источник: <a href="${esc(d.source.url)}" target="_blank" rel="noopener">${rich(d.source.text)}</a></p>` : ''}`;
+  },
+
   cards(b, d) {
     const items = (d.items || []).map((c, i) =>
       `<article class="card" style="--i:${i}">${c.icon ? `<div class="card-ic">${icon(c.icon)}</div>` : ''}${c.tag ? `<span class="tag">${rich(c.tag)}</span>` : ''}<h3>${rich(c.title)}</h3><p>${rich(c.text)}</p></article>`).join('');
