@@ -127,6 +127,11 @@ const RENDER = {
       </div>` : ''}
       ${path ? `<div class="mn-path"><p class="mono">Наш путь</p><ol>${path}</ol></div>` : ''}
       ${d.scarcity ? `<p class="mn-scar">${icon('sparkles')}<span>${rich(d.scarcity)}</span></p>` : ''}
+      ${d.scenarios ? `<div class="mn-scen"><h3 class="st-h">${rich(d.scenarios.title)}</h3><div class="mn-scen-grid">${d.scenarios.items.map((x, i) => `
+        <article><header><span class="mono">сценарий ${i + 1}</span>${icon(x.icon || 'circle')}<h4>${rich(x.name)}</h4></header>
+          <p>${rich(x.what)}</p><p class="mn-scen-m">${icon('compass')}<span>${rich(x.meaning)}</span></p>
+          <p class="mn-scen-we">${icon('users-round')}<b>${rich(x.we)}</b></p></article>`).join('')}</div>
+        ${d.scenarios.verdict ? `<p class="st-call tone-accent">${icon('route')}<span><span class="mono">В любом сценарии</span>${rich(d.scenarios.verdict)}</span></p>` : ''}</div>` : ''}
       ${d.plus ? `<p class="mn-plus">${icon('shield-check')}<span>${rich(d.plus)}</span></p>` : ''}
       ${d.source ? `<p class="note">Источник: <a href="${esc(d.source.url)}" target="_blank" rel="noopener">${rich(d.source.text)}</a></p>` : ''}`;
   },

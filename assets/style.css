@@ -917,6 +917,24 @@ tbody tr:hover td { background: var(--bg-muted); }
   .vs-now { border-left: 0; box-shadow: inset 2px 0 0 var(--ok); padding-bottom: 16px; }
 }
 
+/* сценарии будущего */
+.mn-scen { margin-top: 36px; }
+.mn-scen .st-h { margin-top: 0; }
+.mn-scen-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.mn-scen-grid article { display: flex; flex-direction: column; gap: 10px; padding: clamp(18px, 2.5vw, 22px); border-radius: var(--r-l); border: var(--hair) solid var(--line-strong); background: var(--bg-raised); }
+.mn-scen-grid header { display: grid; grid-template-columns: auto 1fr; column-gap: 10px; align-items: center; }
+.mn-scen-grid header .mono { grid-column: 1 / -1; margin-bottom: 8px; }
+.mn-scen-grid header .ic { width: 22px; height: 22px; color: var(--accent); }
+.mn-scen-grid h4 { font-size: 16px; font-weight: 600; line-height: 1.3; }
+.mn-scen-grid p { font-size: 14px; line-height: 1.5; color: var(--text-muted); }
+.mn-scen-m { display: flex; gap: 8px; padding: 10px 12px; border-radius: var(--r); background: var(--bg-muted); color: var(--text) !important; }
+.mn-scen-m .ic { flex: none; width: 16px; height: 16px; margin-top: 3px; color: var(--accent); }
+.mn-scen-we { margin-top: auto; display: flex; gap: 8px; align-items: flex-start; padding-top: 10px; border-top: var(--hair) solid var(--line); color: var(--text) !important; }
+.mn-scen-we .ic { flex: none; width: 16px; height: 16px; margin-top: 3px; color: var(--ok); }
+.mn-scen-we b { font-weight: 600; }
+.mn-scen .st-call { margin-top: 16px; }
+@media (max-width: 900px) { .mn-scen-grid { grid-template-columns: 1fr; } }
+
 @media (hover: none) { .card:hover { border-color: var(--line-strong); } .mrow:hover { background: none; } }
 @media print {
   .bar, .filters, .theme { display: none; }
