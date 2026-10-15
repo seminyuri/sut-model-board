@@ -46,7 +46,7 @@ for b in site.get('blocks', []):
             if x.get('state') not in ('answer', 'pilot', 'proposal', 'accepted'): errors.append(f"{bid}: у «{x.get('q')}» state должен быть answer | pilot | proposal | accepted")
             if not x.get('q') or not x.get('a'): errors.append(f"{bid}: пустой вопрос или ответ")
     if t == 'story':
-        kinds = {'lead', 'stats', 'cards', 'list', 'steps', 'bars', 'triangle', 'callout', 'sources'}
+        kinds = {'lead', 'stats', 'cards', 'list', 'steps', 'bars', 'triangle', 'callout', 'sources', 'versus'}
         for x in d.get('parts', []):
             if x.get('kind') not in kinds: errors.append(f"{bid}: неизвестная часть «{x.get('kind')}» (можно: {', '.join(sorted(kinds))})")
     if t == 'modules':

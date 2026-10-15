@@ -47,7 +47,8 @@
     {
       "id": "world",
       "type": "story",
-      "src": "blocks/world.json"
+      "src": "blocks/world.json",
+      "nav": "Почему сейчас"
     },
     {
       "id": "school",

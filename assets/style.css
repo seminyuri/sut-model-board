@@ -896,6 +896,27 @@ tbody tr:hover td { background: var(--bg-muted); }
   .sp-price { grid-column: 2; text-align: left; }
 }
 
+/* «было — стало» */
+.vs { margin-top: 14px; border: var(--hair) solid var(--line-strong); border-radius: var(--r-l); background: var(--bg-raised); overflow: hidden; }
+.vs-row { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1fr) minmax(0, 1fr); }
+.vs-row + .vs-row { border-top: var(--hair) solid var(--line); }
+.vs-row > * { padding: 14px 18px; font-size: 14.5px; line-height: 1.5; }
+.vs-row > b { font-weight: 600; display: flex; gap: 10px; align-items: flex-start; }
+.vs-row > b .ic { flex: none; width: 18px; height: 18px; margin-top: 2px; color: var(--accent); }
+.vs-was { color: var(--text-muted); background: var(--bg-muted); }
+.vs-now { border-left: 2px solid var(--ok); }
+.vs-head > * { padding-top: 12px; padding-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+.vs-head .ic { width: 14px; height: 14px; }
+.vs-head > span:last-child { color: var(--ok); }
+@media (max-width: 760px) {
+  .vs-head { display: none; }
+  .vs-row { grid-template-columns: 1fr; }
+  .vs-row > * { padding: 10px 16px; }
+  .vs-row > b { padding-top: 16px; }
+  .vs-was::before, .vs-now::before { content: attr(data-l); display: block; font: 500 10.5px/1.4 var(--f-mono); letter-spacing: .06em; text-transform: uppercase; color: var(--text-subtle); margin-bottom: 2px; }
+  .vs-now { border-left: 0; box-shadow: inset 2px 0 0 var(--ok); padding-bottom: 16px; }
+}
+
 @media (hover: none) { .card:hover { border-color: var(--line-strong); } .mrow:hover { background: none; } }
 @media print {
   .bar, .filters, .theme { display: none; }
