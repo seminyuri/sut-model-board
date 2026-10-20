@@ -84,6 +84,11 @@
       "nav": "Этапы"
     },
     {
+      "id": "voice",
+      "type": "story",
+      "src": "blocks/voice.json"
+    },
+    {
       "id": "modules",
       "type": "modules",
       "src": "blocks/modules.json",
